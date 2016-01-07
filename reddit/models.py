@@ -6,6 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 from mptt.models import MPTTModel, TreeForeignKey
 from hashlib import md5
 import mistune
+import pudb
 
 
 class ContentTypeAware(models.Model):
@@ -92,6 +93,7 @@ class Submission(ContentTypeAware):
     author_name = models.CharField(null=False, max_length=12)
     author = models.ForeignKey(RedditUser)
     subjeffit = models.ForeignKey(Subjeffit)
+    subjeffit_title = models.CharField(null=False, max_length=250)
     title = models.CharField(max_length=250)
     url = models.URLField(null=True, blank=True)
     text = models.TextField(max_length=5000, blank=True)
@@ -101,6 +103,9 @@ class Submission(ContentTypeAware):
     score = models.IntegerField(default=0)
     timestamp = models.DateTimeField(default=timezone.now)
     comment_count = models.IntegerField(default=0)
+
+    def set_subjeffit_name(self):
+        self.subjeffit_title = self.subjeffit.title
 
     def generate_html(self):
         if self.text:

@@ -392,6 +392,7 @@ def submit(request):
             redditUser = RedditUser.objects.get(user=user)
             submission.author = redditUser
             submission.author_name = user.username
+            submission.set_subjeffit_name()
             submission.save()
             messages.success(request, 'Submission created')
             return redirect('/comments/{}'.format(submission.id))
