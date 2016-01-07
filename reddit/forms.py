@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 
-from reddit.models import Submission, RedditUser
+from reddit.models import Submission, RedditUser, Subjeffit
 
 
 class UserForm(forms.ModelForm):
@@ -117,6 +117,11 @@ class SubmissionForm(forms.ModelForm):
         max_length=5000,
         required=False)
 
+    subjeffit = forms.ModelChoiceField(widget=forms.Select(
+        attrs={'class': "form-control"}),
+        queryset=Subjeffit.objects.all().order_by('title'),
+        required=True)
+
     class Meta:
         model = Submission
-        fields = ('title', 'url', 'text')
+        fields = ('title', 'url', 'text', 'subjeffit')

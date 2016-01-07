@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 
 from reddit.forms import UserForm, SubmissionForm, ProfileForm
-from reddit.models import RedditUser, Submission, Comment, Vote
+from reddit.models import RedditUser, Submission, Comment, Vote, Subjeffit
 from reddit.utils.helpers import post_only, get_only
 
 
@@ -67,7 +67,8 @@ def subjeffit(request, subjeffit_title=None):
     Serves subjeffit and all additional submission listings
     with maximum of 25 submissions per page.
     """
-    subjeffit_submissions = Submission.objects.filter(title=subjeffit_title).order_by('-score')
+    subjeffit = get_object_or_404(Subjeffit, title=subjeffit_title)
+    subjeffit_submissions = Submission.objects.filter(subjeffit=subjeffit).order_by('-score')
     paginator = Paginator(subjeffit_submissions, 25)
 
     page = request.GET.get('page', 1)
