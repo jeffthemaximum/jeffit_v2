@@ -19,6 +19,7 @@ import views
 
 urlpatterns = [
     url(r'^$', views.frontpage, name="Frontpage"),
+    url(r'^j/(?P<subjeffit_title>\w+)/$', views.subjeffit, name="subjeffit"),
     url(r'^comments/(?P<thread_id>[0-9]+)$', views.comments, name="Thread"),
     url(r'^login/$', views.user_login, name="Login"),
     url(r'^logout/$', views.user_logout, name="Logout"),
@@ -26,11 +27,8 @@ urlpatterns = [
     url(r'^submit/$', views.submit, name="Submit"),
     url(r'^user/(?P<username>[0-9a-zA-Z_]*)$', views.user_profile, name="User Profile"),
     url(r'^profile/edit/$', views.edit_profile, name="Edit Profile"),
-
     url(r'^post/comment/$', views.post_comment, name="Post Comment"),
     url(r'^vote/$', views.vote, name="Vote"),
-
-
     url(r'^populate/$', views.test_data, name="Create test data"),
 
 ]

@@ -62,6 +62,37 @@ def frontpage(request):
     return render(request, 'public/frontpage.html', {'submissions': submissions,
                                                      'submission_votes': submission_votes})
 
+def subjeffit(request, subjeffit_title=None):
+    """
+    Serves subjeffit and all additional submission listings
+    with maximum of 25 submissions per page.
+    """
+    subjeffit_submissions = Submission.objects.filter(title=subjeffit_title).order_by('-score')
+    paginator = Paginator(subjeffit_submissions, 25)
+
+    page = request.GET.get('page', 1)
+    try:
+        subjeffit_submissions = paginator.page(page)
+    except PageNotAnInteger:
+        raise Http404
+    except EmptyPage:
+        subjeffit_submissions = paginator.page(paginator.num_pages)
+
+    subjeffit_submission_votes = {}
+
+    if request.user.is_authenticated():
+        for submission in subjeffit_submissions:
+            try:
+                vote = Vote.objects.get(
+                    vote_object_type=submission.get_content_type(),
+                    vote_object_id=submission.id,
+                    user=RedditUser.objects.get(user=request.user))
+                subjeffit_submission_votes[submission.id] = vote.value
+            except Vote.DoesNotExist:
+                pass
+
+    return render(request, 'public/subjeffit.html', {'submissions': subjeffit_submissions,
+                                                     'submission_votes': subjeffit_submission_votes})
 
 def comments(request, thread_id=None):
     """

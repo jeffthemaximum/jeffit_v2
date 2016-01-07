@@ -75,6 +75,7 @@ class RedditUser(models.Model):
 class Submission(ContentTypeAware):
     author_name = models.CharField(null=False, max_length=12)
     author = models.ForeignKey(RedditUser)
+    subjeffit = models.ForeignKey(Subjeffit)
     title = models.CharField(max_length=250)
     url = models.URLField(null=True, blank=True)
     text = models.TextField(max_length=5000, blank=True)
@@ -103,6 +104,19 @@ class Submission(ContentTypeAware):
 
     def __unicode__(self):
         return "<Submission:{}>".format(self.id)
+
+
+class Subjeffit(models.Model):
+    title = models.CharField(max_length=250)
+
+    def check_title(self):
+        if " " in self.title:
+            return False
+        else:
+            return True
+
+    def generate_url(self):
+        return "/j/{}".format(self.title)
 
 
 class Comment(MttpContentTypeAware):
