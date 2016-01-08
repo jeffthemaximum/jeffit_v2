@@ -34,7 +34,6 @@ def frontpage(request):
     with maximum of 25 submissions per page.
     """
     # TODO: Serve user votes on submissions too.
-
     all_submissions = Submission.objects.order_by('-score').all()
     paginator = Paginator(all_submissions, 25)
 
