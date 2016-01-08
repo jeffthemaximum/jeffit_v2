@@ -1,5 +1,5 @@
 from django.contrib import admin
-from reddit.models import RedditUser,Submission,Comment,Vote,Subjeffit
+from reddit.models import RedditUser,Submission,Comment,Vote,Subjeffit, Cohort
 
 # Register your models here.
 class SubmissionInline(admin.TabularInline):
@@ -24,3 +24,4 @@ admin.site.register(Submission, SubmissionAdmin)
 admin.site.register(Comment)
 admin.site.register(Vote)
 admin.site.register(Subjeffit)
+admin.site.register(Cohort)

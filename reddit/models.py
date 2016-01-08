@@ -42,14 +42,6 @@ class MttpContentTypeAware(MPTTModel):
         abstract = True
 
 
-class Cohort(models.Model):
-    title = models.CharField(max_length=70)
-    reddit_users = models.ManyToManyField('RedditUser')
-
-    def __unicode__(self):
-        return "<Cohort:{}>".format(self.title)
-
-
 class RedditUser(models.Model):
     user = models.OneToOneField(User)
     first_name = models.CharField(max_length=35, null=True, default=None,
@@ -79,6 +71,14 @@ class RedditUser(models.Model):
 
     def __unicode__(self):
         return "<RedditUser:{}>".format(self.user.username)
+
+
+class Cohort(models.Model):
+    title = models.CharField(max_length=70)
+    reddit_users = models.ManyToManyField(RedditUser, related_name='cohorts')
+
+    def __unicode__(self):
+        return "<Cohort:{}>".format(self.title)
 
 
 class Subjeffit(models.Model):

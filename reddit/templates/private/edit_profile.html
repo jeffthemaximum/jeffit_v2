@@ -140,8 +140,8 @@
                         <label for="instructor" class="col-lg-2 control-label">Instructor</label>
 
                         <div class="col-lg-10">
-                            {{ form.instructor }} Check if you're instructor. Be cool and leave it blank if you're not, cuz I'm one guy who's developing this whole platform.
-                            {% for error in form.instructor.errors %}
+                            {{ form.is_instructor }} Check if you're instructor. Be cool and leave it blank if you're not, cuz I'm one guy who's developing this whole platform.
+                            {% for error in form.is_instructor.errors %}
                                 <p class="text-danger">{{ error }}</p>
                             {% endfor %}
                         </div>

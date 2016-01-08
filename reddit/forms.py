@@ -96,14 +96,14 @@ class ProfileForm(forms.ModelForm):
         queryset=Cohort.objects.all().order_by('title'),
         required=False)
 
-    instructor = forms.BooleanField(required=False)
+    is_instructor = forms.BooleanField(required=False)
 
     class Meta:
         model = RedditUser
         fields = ('first_name', 'last_name', 'email',
                   'display_picture', 'about_text',
                   'homepage', 'github', 'twitter', 'cohort',
-                  'instructor')
+                  'is_instructor')
 
 
 class SubmissionForm(forms.ModelForm):

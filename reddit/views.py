@@ -11,9 +11,9 @@ from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 
 from reddit.forms import UserForm, SubmissionForm, ProfileForm
-from reddit.models import RedditUser, Submission, Comment, Vote, Subjeffit
+from reddit.models import RedditUser, Submission, Comment, Vote, Subjeffit, Cohort
 from reddit.utils.helpers import post_only, get_only
-
+import pudb
 
 @register.filter
 def get_item(dictionary, key):  # pragma: no cover
@@ -161,12 +161,33 @@ def edit_profile(request):
 
     if request.method == 'GET':
         profile_form = ProfileForm(instance=user)
+        # clean this up. How to do it automatically?
+        try:
+            cohort = Cohort.objects.filter(reddit_users=user)[0]
+            profile_form.initial['cohort'] = cohort.pk
+        except:
+            pass
 
     elif request.method == 'POST':
         profile_form = ProfileForm(request.POST, instance=user)
         if profile_form.is_valid():
             profile = profile_form.save(commit=False)
             profile.update_profile_data()
+
+            # if cohort is changing
+            if profile_form.cleaned_data['cohort'] != user.cohorts.all():
+                # if going from None to cohort
+                if user.cohorts.all() == []:
+                    # add user to cohort in form
+                    user.cohorts.add(profile_form.cleaned_data['cohort'])
+                # elif going from cohort to cohort:
+                elif profile_form.cleaned_data['cohort'] is not None:
+                    # add user to cohort in form
+                    user.cohorts.add(profile_form.cleaned_data['cohort'])
+                # elif going from cohort to none
+                else:
+                    user.cohorts.remove(user.cohorts.all()[0])
+
             profile.save()
             messages.success(request, "Profile settings saved")
     else:
