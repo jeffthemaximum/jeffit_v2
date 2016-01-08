@@ -44,6 +44,7 @@ class MttpContentTypeAware(MPTTModel):
 
 class Cohort(models.Model):
     title = models.CharField(max_length=70)
+    reddit_users = models.ManyToManyField('RedditUser')
 
     def __unicode__(self):
         return "<Cohort:{}>".format(self.title)
@@ -67,11 +68,9 @@ class RedditUser(models.Model):
                                default=None)
     github = models.CharField(null=True, blank=True, max_length=39,
                               default=None)
-
     comment_karma = models.IntegerField(default=0)
     link_karma = models.IntegerField(default=0)
-    cohort = models.ForeignKey(Cohort)
-    instructor = models.BooleanField(default=False)
+    is_instructor = models.BooleanField(default=False)
 
     def update_profile_data(self):
         self.about_html = mistune.markdown(self.about_text)

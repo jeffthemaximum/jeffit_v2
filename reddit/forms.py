@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 
-from reddit.models import Submission, RedditUser, Subjeffit
+from reddit.models import Submission, RedditUser, Subjeffit, Cohort
 
 
 class UserForm(forms.ModelForm):
@@ -91,11 +91,19 @@ class ProfileForm(forms.ModelForm):
         max_length=15
     )
 
+    cohort = forms.ModelChoiceField(widget=forms.Select(
+        attrs={'class': "form-control"}),
+        queryset=Cohort.objects.all().order_by('title'),
+        required=False)
+
+    instructor = forms.BooleanField(required=False)
+
     class Meta:
         model = RedditUser
         fields = ('first_name', 'last_name', 'email',
                   'display_picture', 'about_text',
-                  'homepage', 'github', 'twitter')
+                  'homepage', 'github', 'twitter', 'cohort',
+                  'instructor')
 
 
 class SubmissionForm(forms.ModelForm):

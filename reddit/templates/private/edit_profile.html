@@ -121,6 +121,35 @@
 
             </div>
 
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="cohort" class="col-lg-2 control-label">Cohort</label>
+
+                        <div class="col-lg-10">
+                            {{ form.cohort }}
+                            {% for error in form.cohort.errors %}
+                                <p class="text-danger">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="instructor" class="col-lg-2 control-label">Instructor</label>
+
+                        <div class="col-lg-10">
+                            {{ form.instructor }} Check if you're instructor. Be cool and leave it blank if you're not, cuz I'm one guy who's developing this whole platform.
+                            {% for error in form.instructor.errors %}
+                                <p class="text-danger">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
             <div class="form-group">
                 <div class="col-lg-10 col-lg-offset-2">
                     <button type="submit" class="btn btn-primary">Save changes</button>
