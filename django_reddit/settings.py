@@ -133,6 +133,12 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "django_reddit/static"),
 )
 
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+)
+
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
 )
