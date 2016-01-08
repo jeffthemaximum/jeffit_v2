@@ -15,7 +15,7 @@ import os
 
 from django.contrib.messages import constants as messages
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
@@ -130,7 +130,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = 'staticfiles'
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'reddit/static'),
+    os.path.join(BASE_DIR, '../reddit/static'),
 )
 
 STATICFILES_FINDERS = (
