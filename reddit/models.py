@@ -83,6 +83,7 @@ class Cohort(models.Model):
 
 class Subjeffit(models.Model):
     title = models.CharField(max_length=250)
+    about = models.TextField(max_length=5000, blank=True)
 
     def check_title(self):
         if " " in self.title:
