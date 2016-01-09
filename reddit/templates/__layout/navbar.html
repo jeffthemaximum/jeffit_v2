@@ -23,7 +23,9 @@
                         subjeffits
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a href="/j/PhaseOneQuestions">PhaseOneQuestions</a></li>
+                        {% for subjeffit in subjeffits %}
+                            <li><a href="/j/{{ subjeffit.title }}">{{ subjeffit.title }}</a></li>
+                        {% endfor %}
                     </ul>
                 </li>
             </ul>

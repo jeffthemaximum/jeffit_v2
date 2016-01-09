@@ -94,7 +94,7 @@ class Subjeffit(models.Model):
         return "/j/{}".format(self.title)
 
     def __unicode__(self):
-        return "<Subjeffit:{}>".format(self.title)
+        return self.title
 
 
 class Submission(ContentTypeAware):
