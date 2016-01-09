@@ -92,7 +92,8 @@ def subjeffit(request, subjeffit_title=None):
                 pass
 
     return render(request, 'public/subjeffit.html', {'submissions': subjeffit_submissions,
-                                                     'submission_votes': subjeffit_submission_votes})
+                                                     'submission_votes': subjeffit_submission_votes,
+                                                     'subjeffit': subjeffit})
 
 def comments(request, thread_id=None):
     """
