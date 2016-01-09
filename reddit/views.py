@@ -263,12 +263,28 @@ def register(request):
         user_form = UserForm(request.POST)
 
         if user_form.is_valid():
+
+            # check if registration code is valid
+            cohorts = map(lambda x: x.registration_code, list(Cohort.objects.all()))
+            if user_form.cleaned_data['cohort_registration_code'] not in cohorts:
+                user_form = UserForm()
+                messages.warning(request, 'Invalid registration code. Try again!')
+                return render(request, 'public/register.html', {'form': user_form})
+
             user = user_form.save()
             user.set_password(user.password)
             user.save()
             reddit_user = RedditUser()
             reddit_user.user = user
             reddit_user.save()
+
+            # add user to cohort that corresponds to regitrations code
+            cohort = Cohort.objects.get(
+                registration_code=user_form.cleaned_data['cohort_registration_code']
+            )
+            reddit_user.cohorts.add(cohort)
+            reddit_user.save()
+
             user = authenticate(username=request.POST['username'],
                                 password=request.POST['password'])
             login(request, user)

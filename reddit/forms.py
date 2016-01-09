@@ -26,6 +26,15 @@ class UserForm(forms.ModelForm):
          'required': ''}),
         min_length=4,
         required=True)
+    cohort_registration_code = forms.CharField(widget=forms.TextInput(
+        attrs=
+        {'class': "form-control",
+         'placeholder': "Registration Code",
+         'required': ''}),
+        max_length=6,
+        min_length=6,
+        required=True,
+        validators=[alphanumeric])
 
     class Meta:
         model = User

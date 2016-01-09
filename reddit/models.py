@@ -5,6 +5,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from mptt.models import MPTTModel, TreeForeignKey
 from hashlib import md5
+from utils.helpers import generate_registration_code
 import mistune
 import pudb
 
@@ -76,6 +77,10 @@ class RedditUser(models.Model):
 class Cohort(models.Model):
     title = models.CharField(max_length=70)
     reddit_users = models.ManyToManyField(RedditUser, related_name='cohorts')
+    registration_code = models.CharField(
+        max_length=6,
+        default=generate_registration_code()
+    )
 
     def __unicode__(self):
         return "<Cohort:{}>".format(self.title)
