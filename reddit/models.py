@@ -76,7 +76,7 @@ class RedditUser(models.Model):
 
 class Cohort(models.Model):
     title = models.CharField(max_length=70)
-    reddit_users = models.ManyToManyField(RedditUser, related_name='cohorts')
+    reddit_users = models.ManyToManyField(RedditUser, related_name='cohorts', blank=True, default=None)
     registration_code = models.CharField(
         max_length=6,
         default=generate_registration_code()
