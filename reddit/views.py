@@ -175,6 +175,10 @@ def edit_profile(request):
             profile = profile_form.save(commit=False)
             profile.update_profile_data()
 
+            # update user object with email from reddituser profile update
+            request.user.email = profile_form.cleaned_data['email']
+            request.user.save()
+
             # if cohort is changing
             if profile_form.cleaned_data['cohort'] != user.cohorts.all():
                 # if going from None to cohort
