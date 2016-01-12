@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
 from django.conf.urls import include, url
+from django.contrib.auth.views import password_reset, password_change_done, password_reset_confirm, password_reset_complete, password_reset_done
 import views
 
 
@@ -30,5 +31,8 @@ urlpatterns = [
     url(r'^post/comment/$', views.post_comment, name="Post Comment"),
     url(r'^vote/$', views.vote, name="Vote"),
     url(r'^populate/$', views.test_data, name="Create test data"),
-
+    url(r'^accounts/password/reset/$', password_reset, {'template_name': 'public/password_reset.html'}, name="password_reset"),
+    url(r'^change-password-done/$', password_reset_done, {'template_name': 'public/password_change_done.html'}, name="password_reset_done"),
+    url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', password_reset_confirm, {'template_name': 'public/password_reset_confirm.html'}, name='password_reset_confirm'),
+    url(r'^password/reset/complete/$', password_reset_complete, {'template_name': 'public/password_reset_complete.html'}, name='password_reset_complete'),
 ]
