@@ -134,9 +134,6 @@ crashlytics-build.properties
 # Sqlite3 databases
 *.sqlite3
 
-# Migrations
-
-*/migrations/*
 
 _screenshots/
 LICENSE
