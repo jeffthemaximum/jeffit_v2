@@ -283,6 +283,7 @@ def register(request):
                 registration_code=user_form.cleaned_data['cohort_registration_code']
             )
             reddit_user.cohorts.add(cohort)
+            reddit_user.email = user.email
             reddit_user.save()
 
             user = authenticate(username=request.POST['username'],

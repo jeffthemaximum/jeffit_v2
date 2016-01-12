@@ -25,7 +25,15 @@ class UserForm(forms.ModelForm):
          'placeholder': "Password",
          'required': ''}),
         min_length=4,
-        required=True)
+        required=True,
+        validators=[alphanumeric])
+    email = forms.CharField(widget=forms.TextInput(
+        attrs=
+        {'class': "form-control",
+         'placeholder': "Email address",
+         'required': ''}),
+         max_length=30,
+         required=True)
     cohort_registration_code = forms.CharField(widget=forms.TextInput(
         attrs=
         {'class': "form-control",
@@ -38,7 +46,7 @@ class UserForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('username', 'password')
+        fields = ('username', 'password', 'email')
 
 
 class ProfileForm(forms.ModelForm):
