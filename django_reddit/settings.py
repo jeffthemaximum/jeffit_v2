@@ -47,6 +47,7 @@ INSTALLED_APPS = (
     'template_profiler_panel',
     'mptt',
     'reddit',
+    'password_reset',
 )
 
 DEBUG_TOOLBAR_PANELS = [
