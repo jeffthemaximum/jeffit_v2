@@ -172,5 +172,51 @@ $('a[name="replyButton"]').click(function () {
 
 });
 
+function removeOptionFromUrl() {
+    var url = $(location).attr('href');
+    var option = url.substr(url.length - 8, 7);
+    var options = ['option1', 'option2', 'option3']
+    if (options.indexOf(option) >= 0) {
+        url = url.substr(0, url.length - 8); 
+    }
+    return url;
+}
+
+// get sort buttons on leaderboard when clicked
+$("input[name='options']").change(function(){
+    console.log(this.id);
+    var sortOption = this.id;
+    var url = removeOptionFromUrl() + this.id;
+    window.location.href = url;
+    // $.ajax({
+    //     url: url,
+    //     type: "get", //send it through get method
+
+    //     success: function(response) {
+            
+    //     },
+    //     error: function(xhr) {
+    //     //Do Something to handle error
+    // }
+    // });
+})
+
+function getOptionFromUrl() {
+    var url = $(location).attr('href');
+    var option = url.substr(url.length - 8, 7);
+    return option;
+}
+
+$(document).ready(function(){
+
+    var option = getOptionFromUrl();
+    var options = ['option1', 'option2', 'option3']
+    if (options.indexOf(option) >= 0) {
+        $("input[id='"+option+"']").parent().attr('class', 'btn btn-primary btn-sm active');
+    } else {
+        $("input[id='option1']").parent().attr('class', 'btn btn-primary btn-sm active');
+    }
+});
+
 
 

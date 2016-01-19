@@ -150,3 +150,14 @@ class SubmissionForm(forms.ModelForm):
     class Meta:
         model = Submission
         fields = ('title', 'url', 'text', 'subjeffit')
+
+
+class LeaderboardSortForm(forms.Form):
+    sorted_by = forms.ChoiceField(widget=forms.Select(
+        attrs={'class': "form-control"}),
+        choices=(
+            ('most', 'Most Karma'), 
+            ('least', 'Least Karma'), 
+            ('cohort', 'Cohort'),
+        ),
+    )

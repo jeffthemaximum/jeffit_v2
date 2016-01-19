@@ -10,7 +10,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 
-from reddit.forms import UserForm, SubmissionForm, ProfileForm
+from reddit.forms import UserForm, SubmissionForm, ProfileForm, LeaderboardSortForm
 from reddit.models import RedditUser, Submission, Comment, Vote, Subjeffit, Cohort
 from reddit.utils.helpers import post_only, get_only
 import pudb
@@ -443,8 +443,35 @@ def submit(request):
 
 
 def leaderboard(request, sort=None):
-    pass
 
+    x = 2
+    y = 3
+
+    sort_dict = {
+        'option1': '-total_karma',
+        'option2': 'total_karma',
+        'option3': 'cohort'
+    }
+    # try: 
+    #     sort = sort_dict[request.GET['sort']]
+    #     redditusers = RedditUser.objects.all().order_by(sort)
+    if sort != None:
+        redditusers = RedditUser.objects.all().order_by(sort_dict[sort])
+
+    else:
+        redditusers = RedditUser.objects.all().order_by('-total_karma')
+
+    paginator = Paginator(redditusers, 25)
+
+    page = request.GET.get('page', 1)
+    try:
+        redditusers = paginator.page(page)
+    except PageNotAnInteger:
+        raise Http404
+    except EmptyPage:
+        redditusers = paginator.page(paginator.num_pages)
+
+    return render(request, 'public/leaderboard.html', {'redditusers': redditusers})
 
 @csrf_exempt
 def test_data(request):  # pragma: no cover
