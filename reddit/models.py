@@ -63,6 +63,7 @@ class RedditUser(models.Model):
                               default=None)
     comment_karma = models.IntegerField(default=0)
     link_karma = models.IntegerField(default=0)
+    total_karma = models.IntegerField(default=0)
     is_instructor = models.BooleanField(default=False)
 
     def update_profile_data(self):
@@ -70,6 +71,9 @@ class RedditUser(models.Model):
         if self.display_picture:
             self.gravatar_hash = md5(self.email.lower()).hexdigest()
 
+    def update_total_karma(self):
+        self.total_karma = self.comment_karma + self.link_karma
+        
     def __unicode__(self):
         return "<RedditUser:{}>".format(self.user.username)
 
@@ -230,6 +234,9 @@ class Vote(models.Model):
             submission = vote_object.submission
             vote_object.author.comment_karma += vote_value
 
+        # update total vote count on RedditUser model
+        vote_object.author.update_total_karma()
+
         vote = cls(user=user,
                    vote_object=vote_object,
                    value=vote_value)
@@ -242,6 +249,7 @@ class Vote(models.Model):
             vote_object.ups += 1
         elif vote_value == -1:
             vote_object.downs += 1
+
 
         vote_object.save()
         vote_object.author.save()
@@ -275,6 +283,9 @@ class Vote(models.Model):
         else:
             self.vote_object.author.comment_karma += vote_diff
 
+        # update total vote count on RedditUser model
+        vote_object.author.update_total_karma()
+
         self.value = new_vote_value
         self.vote_object.save()
         self.vote_object.author.save()
@@ -298,6 +309,9 @@ class Vote(models.Model):
             self.vote_object.author.link_karma += vote_diff
         else:
             self.vote_object.author.comment_karma += vote_diff
+
+        # update total vote count on RedditUser model
+        vote_object.author.update_total_karma()
 
         self.value = 0
         self.save()
