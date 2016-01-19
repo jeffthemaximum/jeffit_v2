@@ -442,6 +442,10 @@ def submit(request):
     return render(request, 'public/submit.html', {'form': submission_form})
 
 
+def leaderboard(request, sort=None):
+    pass
+
+
 @csrf_exempt
 def test_data(request):  # pragma: no cover
     """
