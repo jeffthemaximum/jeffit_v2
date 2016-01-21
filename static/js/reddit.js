@@ -184,21 +184,9 @@ function removeOptionFromUrl() {
 
 // get sort buttons on leaderboard when clicked
 $("input[name='options']").change(function(){
-    console.log(this.id);
     var sortOption = this.id;
     var url = removeOptionFromUrl() + this.id;
     window.location.href = url;
-    // $.ajax({
-    //     url: url,
-    //     type: "get", //send it through get method
-
-    //     success: function(response) {
-            
-    //     },
-    //     error: function(xhr) {
-    //     //Do Something to handle error
-    // }
-    // });
 })
 
 function getOptionFromUrl() {
@@ -208,7 +196,6 @@ function getOptionFromUrl() {
 }
 
 $(document).ready(function(){
-
     var option = getOptionFromUrl();
     var options = ['option1', 'option2', 'option3']
     if (options.indexOf(option) >= 0) {
