@@ -152,9 +152,36 @@ var newCommentForm = '<form id="commentForm" class="form-horizontal"\
                     </form>';
 
 
+function buildEditCommentForm(originalComment) {
+    var editCommentForm = '<form id="editCommentForm" class="form-horizontal"\
+                            action="/post/editcomment/"\
+                            data-parent-type="comment">\
+                            <fieldset>\
+                            <div class="form-group comment-group">\
+                                <label for="commentContent" class="col-lg-2 control-label">Edit comment</label>\
+                                <div class="col-lg-10">\
+                                    <textarea class="form-control" rows="3" id="commentContent">'
+                                    +originalComment+'</textarea>\
+                                    <span id="postResponse" class="text-success" style="display: none"></span>\
+                                </div>\
+                            </div>\
+                            <div class="form-group">\
+                                <div class="col-lg-10 col-lg-offset-2">\
+                                    <button type="submit" class="btn btn-primary">Submit</button>\
+                                </div>\
+                            </div>\
+                        </fieldset>\
+                    </form>';
+    return editCommentForm;
+}
+
+
+
 $('a[name="replyButton"]').click(function () {
     var $mediaBody = $(this).parent().parent().parent();
+    $(this).parent().parent().find("a[name=editButton]").toggle()
     if ($mediaBody.find('#commentForm').length == 0) {
+        
         $mediaBody.parent().find(".reply-container:first").append(newCommentForm);
         var $form = $mediaBody.find('#commentForm');
         $form.data('parent-id', $mediaBody.parent().data().parentId);
@@ -168,16 +195,89 @@ $('a[name="replyButton"]').click(function () {
         } else {
             $commentForm.removeAttr('style')
         }
+       //$(this).parent().parent().find("a[name=editButton]").show()
     }
 
 });
+
+function submitEditEvent(event, form) {
+    event.preventDefault();
+    var $form = form;
+    var data = $form.data();
+    url = $form.attr("action");
+    editCommentContent = $form.find("textarea#commentContent").val();
+
+    var csrftoken = getCookie('csrftoken');
+
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+    var doPost = $.post(url, {
+        replyId: data.replyId,
+        replyType: data.replyType,
+        ancestorType: data.ancestorType,
+        ancestorId: data.ancestorId,
+        editCommentContent: editCommentContent
+    });
+
+    doPost.done(function (response) {
+        var errorLabel = $form.find("span#postResponse");
+        if (response.msg) {
+            errorLabel.text(response.msg);
+            errorLabel.removeAttr('style');
+        }
+    });
+}
+
+$("#editCommentForm").submit(function (event) {
+    submitEditEvent(event, $(this));
+});
+
+$('a[name="editButton"]').click(function () {
+    var $mediaBody = $(this).closest('.media-body');
+    if ($mediaBody.find('#editCommentForm').length == 0) {
+        $(this).parent().parent().find("a[name=replyButton]").hide()
+        // find and store contents of comment
+        var originalCommentText = $mediaBody.find('p').first().html();
+        // replace originalCommentText with form to edit it, prepopulated with originalCommentText
+        var editCommentForm = buildEditCommentForm(originalCommentText);
+        $mediaBody.find('p').first().html(editCommentForm);
+        var $form = $mediaBody.find('#editCommentForm');
+        var replyId = $mediaBody.data().parentId;
+        var replyType = $mediaBody.data().parentType;
+        var ancestorType = $mediaBody.data().ancestor;
+        var ancestorId = $mediaBody.data().ancestorId;
+        $form.data('reply-id', replyId);
+        $form.data('reply-type', replyType);
+        $form.data('ancestor-type', ancestorType);
+        $form.data('ancestor-id', ancestorId);
+        $form.submit(function (event) {
+            submitEditEvent(event, $(this));
+        });
+    } else {
+        var originalCommentText = $mediaBody.find('#editCommentForm').find("textarea#commentContent").val();
+        $editCommentForm = $mediaBody.find('#editCommentForm:first');
+        if ($editCommentForm.attr('style') == null) {
+            $editCommentForm.css('display', 'none')
+        } else {
+            $editCommentForm.removeAttr('style')
+        }
+        $mediaBody.find('p').first().html(originalCommentText);
+        $(this).parent().parent().find("a[name=replyButton]").show()
+    }
+});
+
 
 function removeOptionFromUrl() {
     var url = $(location).attr('href');
     var option = url.substr(url.length - 8, 7);
     var options = ['option1', 'option2', 'option3']
     if (options.indexOf(option) >= 0) {
-        url = url.substr(0, url.length - 8); 
+        url = url.substr(0, url.length - 8);
     }
     return url;
 }

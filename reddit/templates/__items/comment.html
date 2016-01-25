@@ -19,13 +19,18 @@
         </div>
         <div class="media-body"
              data-parent-id="{{ node.id }}"
-             data-parent-type="comment">
+             data-parent-type="comment"
+             data-ancestor="{{ node.get_ancestor }}"
+             data-ancestor-id="{{ node.get_ancestor_id }}">
             <h5 class="media-heading"><a href="/user/{{ node.author_name }}">{{ node.author_name }}</a>
                 <a class='score'> {{ node.score }}</a> points posted {{ node.timestamp|naturaltime }}</h5>
             {{ node.html_comment|safe }}
             <div class="reply-container">
                 <ul class="buttons">
                     <li><a href="javascript:void(0)" name="replyButton">reply</a></li>
+                    {% if node.author_name == user.username %}
+                    <li><a href="javascript:void(0)" name="editButton">edit</a></li>
+                    {% endif %}
                 </ul>
             </div>
             {% if not node.is_leaf_node %}

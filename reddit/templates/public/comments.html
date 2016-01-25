@@ -4,7 +4,9 @@
 {% block content %}
     {#    Submission block#}
 
-    <div class="media">
+    <div class="media"
+        data-ancestor="submission"
+        data-ancestor-id="{{ submission.id }}">
         <div class="media-left">
             <div class="vote"
                  data-what-type="submission"

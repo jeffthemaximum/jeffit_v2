@@ -332,6 +332,39 @@ def post_comment(request):
     comment.save()
     return JsonResponse({'msg': "Your comment has been posted."})
 
+@post_only
+def edit_comment(request):
+    if not request.user.is_authenticated():
+        return JsonResponse({'msg': "You need to log in to post new comments."})
+    reply_type = request.POST.get('replyType', None)
+    reply_id = request.POST.get('replyId', None)
+    raw_comment = request.POST.get('editCommentContent', None)
+
+    if not all([reply_id, reply_type]) or \
+                    reply_type not in ['comment', 'submission'] or \
+            not reply_id.isdigit():
+        return HttpResponseBadRequest()
+
+    if not raw_comment:
+        return JsonResponse({'msg': "You have to write something."})
+    author = RedditUser.objects.get(user=request.user)
+    #find original comment
+    parent_object = None
+    try:  # try and get comment or submission we're voting on
+        if reply_type == 'comment':
+            parent_object = Comment.objects.get(id=reply_id)
+        elif reply_type == 'submission':
+            parent_object = Submission.objects.get(id=reply_id)
+
+    except (Comment.DoesNotExist, Submission.DoesNotExist):
+        return HttpResponseBadRequest()
+    comment = Comment.objects.get(id=reply_id)
+    comment.raw_comment = raw_comment
+    comment.update_html()
+    comment.save()
+
+    return JsonResponse({'msg': "Your comment has been updated."})
+
 
 @post_only
 def vote(request):

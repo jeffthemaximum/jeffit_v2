@@ -161,6 +161,21 @@ class Comment(MttpContentTypeAware):
     class MPTTMeta:
         order_insertion_by = ['-score']
 
+    def get_ancestor(self):
+        if self.parent != None:
+            return 'comment'
+        else:
+            return 'submission'
+
+    def update_html(self):
+        self.html_comment = mistune.markdown(self.raw_comment)
+
+    def get_ancestor_id(self):
+        if self.parent != None:
+            return self.parent.id
+        else:
+            return self.submission.id
+
     @classmethod
     def create(cls, author, raw_comment, parent):
         """

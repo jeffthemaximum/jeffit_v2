@@ -17,7 +17,7 @@ def get_only(func):# pragma: no cover
 def generate_registration_code():
     import random
     key = []
-    # add 8 letters or numbers to key
+    # add 6 letters or numbers to key
     for i in range(6):
         # determine if I should add number or letter
         decider = random.random()
