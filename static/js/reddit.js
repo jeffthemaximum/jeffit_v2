@@ -244,7 +244,7 @@ $('a[name="editButton"]').click(function () {
     if ($mediaBody.find('#editCommentForm').length == 0) {
         $(this).parent().parent().find("a[name=replyButton]").hide()
         // find and store contents of comment
-        var originalCommentText = $mediaBody.find('.commment-holder').html().replace(/ /g,'');
+        var originalCommentText = $mediaBody.find('.commment-holder').html().trim();
         //store original html
         storedHTML = originalCommentText;
         // convert originalCommentText to markdown
