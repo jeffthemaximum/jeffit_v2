@@ -181,7 +181,7 @@ $('a[name="replyButton"]').click(function () {
     var $mediaBody = $(this).parent().parent().parent();
     $(this).parent().parent().find("a[name=editButton]").toggle()
     if ($mediaBody.find('#commentForm').length == 0) {
-        
+
         $mediaBody.parent().find(".reply-container:first").append(newCommentForm);
         var $form = $mediaBody.find('#commentForm');
         $form.data('parent-id', $mediaBody.parent().data().parentId);
@@ -237,15 +237,22 @@ $("#editCommentForm").submit(function (event) {
     submitEditEvent(event, $(this));
 });
 
+var storedHTML = '';
+
 $('a[name="editButton"]').click(function () {
     var $mediaBody = $(this).closest('.media-body');
     if ($mediaBody.find('#editCommentForm').length == 0) {
         $(this).parent().parent().find("a[name=replyButton]").hide()
         // find and store contents of comment
-        var originalCommentText = $mediaBody.find('p').first().html();
+        var originalCommentText = $mediaBody.find('.commment-holder').html().replace(/ /g,'');
+        //store original html
+        storedHTML = originalCommentText;
+        // convert originalCommentText to markdown
+        originalCommentText = toMarkdown(originalCommentText);
+        storedText = originalCommentText;
         // replace originalCommentText with form to edit it, prepopulated with originalCommentText
         var editCommentForm = buildEditCommentForm(originalCommentText);
-        $mediaBody.find('p').first().html(editCommentForm);
+        $mediaBody.find('.commment-holder').html(editCommentForm);
         var $form = $mediaBody.find('#editCommentForm');
         var replyId = $mediaBody.data().parentId;
         var replyType = $mediaBody.data().parentType;
@@ -256,6 +263,7 @@ $('a[name="editButton"]').click(function () {
         $form.data('ancestor-type', ancestorType);
         $form.data('ancestor-id', ancestorId);
         $form.submit(function (event) {
+            $(this).parent().parent().find("a[name=editButton]").toggle()
             submitEditEvent(event, $(this));
         });
     } else {
@@ -266,7 +274,7 @@ $('a[name="editButton"]').click(function () {
         } else {
             $editCommentForm.removeAttr('style')
         }
-        $mediaBody.find('p').first().html(originalCommentText);
+        $mediaBody.find('.commment-holder').html(marked(storedHTML));
         $(this).parent().parent().find("a[name=replyButton]").show()
     }
 });

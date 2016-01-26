@@ -24,7 +24,9 @@
              data-ancestor-id="{{ node.get_ancestor_id }}">
             <h5 class="media-heading"><a href="/user/{{ node.author_name }}">{{ node.author_name }}</a>
                 <a class='score'> {{ node.score }}</a> points posted {{ node.timestamp|naturaltime }}</h5>
-            {{ node.html_comment|safe }}
+            <div class="commment-holder">
+                {{ node.html_comment|safe }}
+            </div>
             <div class="reply-container">
                 <ul class="buttons">
                     <li><a href="javascript:void(0)" name="replyButton">reply</a></li>
