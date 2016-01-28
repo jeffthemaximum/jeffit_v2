@@ -73,7 +73,7 @@ class RedditUser(models.Model):
 
     def update_total_karma(self):
         self.total_karma = self.comment_karma + self.link_karma
-        
+
     def __unicode__(self):
         return "<RedditUser:{}>".format(self.user.username)
 

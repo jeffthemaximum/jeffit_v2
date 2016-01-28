@@ -237,6 +237,7 @@ $("#editCommentForm").submit(function (event) {
     submitEditEvent(event, $(this));
 });
 
+//this causes problems when users try to edit more than one comment simulaneously
 var storedHTML = '';
 
 $('a[name="editButton"]').click(function () {
