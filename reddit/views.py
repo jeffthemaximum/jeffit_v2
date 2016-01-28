@@ -34,7 +34,9 @@ def frontpage(request):
     with maximum of 25 submissions per page.
     """
     # TODO: Serve user votes on submissions too.
-    all_submissions = Submission.objects.order_by('-score').all()
+    # all_submissions = Submission.objects.order_by('-score').all()
+    all_submissions = sorted(Submission.objects.all(), key=lambda s: s.hotness(), reverse=True)
+
     paginator = Paginator(all_submissions, 25)
 
     page = request.GET.get('page', 1)
@@ -67,7 +69,8 @@ def subjeffit(request, subjeffit_title=None):
     with maximum of 25 submissions per page.
     """
     subjeffit = get_object_or_404(Subjeffit, title=subjeffit_title)
-    subjeffit_submissions = Submission.objects.filter(subjeffit=subjeffit).order_by('-score')
+    #subjeffit_submissions = Submission.objects.filter(subjeffit=subjeffit).order_by('-score')
+    subjeffit_submissions = sorted(Submission.objects.filter(subjeffit=subjeffit),all(), key=lambda s: s.hotness(), reverse=True)
     paginator = Paginator(subjeffit_submissions, 25)
 
     page = request.GET.get('page', 1)
@@ -485,7 +488,7 @@ def leaderboard(request, sort=None):
         'option2': 'total_karma',
         'option3': 'cohort'
     }
-    # try: 
+    # try:
     #     sort = sort_dict[request.GET['sort']]
     #     redditusers = RedditUser.objects.all().order_by(sort)
     if sort != None:

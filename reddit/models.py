@@ -6,9 +6,14 @@ from django.contrib.contenttypes.models import ContentType
 from mptt.models import MPTTModel, TreeForeignKey
 from hashlib import md5
 from utils.helpers import generate_registration_code
+from datetime import datetime
+from math import log
 import mistune
 import pudb
+import pytz
 
+epoch = datetime(1970, 1, 1)
+epoch = pytz.utc.localize(epoch)
 
 class ContentTypeAware(models.Model):
     def get_content_type(self):
@@ -121,6 +126,31 @@ class Submission(ContentTypeAware):
     score = models.IntegerField(default=0)
     timestamp = models.DateTimeField(default=timezone.now)
     comment_count = models.IntegerField(default=0)
+
+    def epoch_seconds(self, date):
+        time_diff = date - epoch
+        return time_diff.days * 86400 + time_diff.seconds + (float(time_diff.microseconds) / 1000000)
+
+    def make_score(self, happiness, sadness):
+        return happiness - sadness
+
+    def hotness(self):
+        # add ups votes and comments together for total positive karma
+        total_happiness = self.ups + self.comment_count
+        # check if pos or 0 or neg karma
+        net_happiness = self.make_score(total_happiness, self.downs)
+        # check pos, neg, or zero
+        sign_check = 1 if net_happiness > 0 else -1 if net_happiness < 0 else 0
+        # get log of nethappiness if nethappiness > 1 else log1
+        logifier = log(max(abs(net_happiness), 1), 10)
+        # get seconds since epoch
+        seconds = self.epoch_seconds(self.timestamp) - 1134028003
+        # return algorithm
+        # smooshes happiness by log
+        # makes it pos or neg
+        # factors in how old it is
+        return round(sign_check * logifier + seconds / 45000, 7)
+
 
     def set_subjeffit_name(self):
         self.subjeffit_title = self.subjeffit.title
