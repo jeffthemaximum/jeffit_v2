@@ -70,7 +70,7 @@ def subjeffit(request, subjeffit_title=None):
     """
     subjeffit = get_object_or_404(Subjeffit, title=subjeffit_title)
     #subjeffit_submissions = Submission.objects.filter(subjeffit=subjeffit).order_by('-score')
-    subjeffit_submissions = sorted(Submission.objects.filter(subjeffit=subjeffit),all(), key=lambda s: s.hotness(), reverse=True)
+    subjeffit_submissions = sorted(Submission.objects.filter(subjeffit=subjeffit).all(), key=lambda s: s.hotness(), reverse=True)
     paginator = Paginator(subjeffit_submissions, 25)
 
     page = request.GET.get('page', 1)
