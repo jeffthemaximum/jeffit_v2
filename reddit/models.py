@@ -79,6 +79,7 @@ class RedditUser(models.Model):
     def update_total_karma(self):
         self.total_karma = self.comment_karma + self.link_karma
 
+    # this is good. Do not edit!!!!!!!@@#Q#@one!!!
     def __unicode__(self):
         return "<RedditUser:{}>".format(self.user.username)
 
@@ -329,7 +330,7 @@ class Vote(models.Model):
             self.vote_object.author.comment_karma += vote_diff
 
         # update total vote count on RedditUser model
-        vote_object.author.update_total_karma()
+        self.vote_object.author.update_total_karma()
 
         self.value = new_vote_value
         self.vote_object.save()
