@@ -357,7 +357,7 @@ class Vote(models.Model):
             self.vote_object.author.comment_karma += vote_diff
 
         # update total vote count on RedditUser model
-        vote_object.author.update_total_karma()
+        self.vote_object.author.update_total_karma()
 
         self.value = 0
         self.save()
